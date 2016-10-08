@@ -13,23 +13,38 @@ Muito simples! Vamos estender isso dizendo que qualquer valor pode estar dentro 
 
 ![](img/value_and_context.png)
 
-Agora quando você aplica uma função a este valor, você receberá diferentes resultados dependendo do seu contexto. This is the idea that Functors, Applicatives, Monads, Arrows etc are all based on. The Maybe data type defines two related contexts:
-data Maybe a = Nothing | Just a
-In a second we’ll see how function application is different when something is a Just a versus a Nothing. First let’s talk about Functors!
-Functors
-When a value is wrapped in a context, you can’t apply a normal function to it:
+Agora quando você aplica uma função a este valor, você receberá diferentes resultados dependendo do seu contexto. Esta é a ideia que serve de alicerce para  Functors, Applicatives, Monads, Arrows(veja morfismos) etc.  O tipo  `Maybe` define dois contextos
 
-This is where fmap comes in. fmap is from the street, fmap is hip to contexts. fmap knows how to apply functions to values that are wrapped in a context. For example, suppose you want to apply (+3) to Just 2. Use fmap:
+```haskell
+data Maybe a = Nothing | Just a
+```
+
+Posteriormente eu lhe mostrarei as diferenças quando se aplica uma função quando algo é um `Just` ou `Nothing`, mas antes disso vamos conversar um pouco sobre Functors!
+
+
+## Functors
+
+Quando um valor está dentro de um contexto ele não permite a aplicação de uma função "ordinária" à ele
+
+![](img/no_fmap_ouch.png)
+
+Aqui é onde o `fmap` surge. `fmap` is from the street, `fmap` is hip to contexts. `fmap` knows how to apply functions to values that are wrapped in a context. Por exemplo, suponha que você quer
+aplicar `(+3)` para `Just 2`. Usando fmap
+
+```haskell
 > fmap (+3) (Just 2)
 Just 5
+```
 
-Bam! fmap shows us how it’s done! But how does fmap know how to apply the function?
+Bum! `fmap` shows us how it’s done! But how does `fmap` know how to apply the function?
 Just what is a Functor, really?
 Functor is a typeclass. Here’s the definition:
 
 A Functor is any data type that defines how fmap applies to it. Here’s how fmap works:
 
 So we can do this:
+
+
 > fmap (+3) (Just 2)
 Just 5
 And fmap magically applies this function, because Maybe is a Functor. It specifies how fmap applies to Justs and Nothings:
