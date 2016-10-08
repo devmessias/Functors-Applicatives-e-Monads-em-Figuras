@@ -1,13 +1,16 @@
-# Functores-Applicatives-e-Monads-em-Figuras
+# Functores, Applicatives e Monads com figuras
 
 
-Here’s a simple value: 
 
-And we know how to apply a function to this value: 
+Abaixo uma imagem representando um valor
+![](img/value.png)
+e  você sabe como aplicar uma função cujo o argumento  é o  valor acima,
+![](img/value_apply.png)
+Muito simples! Vamos estender isso dizendo que qualquer valor pode estar dentro de um contexto. Um recurso didático é imaginar que o contexto é uma caixa na qual você pode colocar um valor dentro
 
-Simple enough. Lets extend this by saying that any value can be in a context. For now you can think of a context as a box that you can put a value in:
+![](img/value_and_context.png)
 
-Now when you apply a function to this value, you’ll get different results depending on the context. This is the idea that Functors, Applicatives, Monads, Arrows etc are all based on. The Maybe data type defines two related contexts:
+Agora quando você aplica uma função a este valor, você receberá diferentes resultados dependendo do seu contexto. This is the idea that Functors, Applicatives, Monads, Arrows etc are all based on. The Maybe data type defines two related contexts:
 data Maybe a = Nothing | Just a
 In a second we’ll see how function application is different when something is a Just a versus a Nothing. First let’s talk about Functors!
 Functors
