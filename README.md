@@ -1,11 +1,14 @@
 # Functores, Applicatives e Monads com figuras
 
 
-
 Abaixo uma imagem representando um valor
+
 ![](img/value.png)
+
 e  você sabe como aplicar uma função cujo o argumento  é o  valor acima,
+
 ![](img/value_apply.png)
+
 Muito simples! Vamos estender isso dizendo que qualquer valor pode estar dentro de um contexto. Um recurso didático é imaginar que o contexto é uma caixa na qual você pode colocar um valor dentro
 
 ![](img/value_and_context.png)
