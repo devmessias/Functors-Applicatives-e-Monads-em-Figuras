@@ -1,17 +1,20 @@
-mi# Functores, Applicatives e Monads com figuras
+# Functors, Applicatives e Monads em figuras
 
+A imagem abaixo representa um valor simples
 
 ![](img/value.png)
 
-e  você sabe como aplicar uma função cujo o argumento  é o  valor acima,
+E você sabe como aplicar uma função cujo o argumento  é o  valor acima,
 
 ![](img/value_apply.png)
 
-Muito simples! Vamos estender isso dizendo que qualquer valor pode estar dentro de um contexto. Um recurso didático é imaginar que o contexto é uma caixa na qual você pode colocar um valor dentro
+Muito simples! Vamos estender isso dizendo que qualquer valor pode estar dentro de um contexto. Um recurso didático é imaginar que o contexto é uma caixa na qual você pode colocar valores dentro
 
 ![](img/value_and_context.png)
 
-Agora quando você aplica uma função a este valor, você receberá diferentes resultados dependendo do seu contexto. Esta é a ideia que serve de alicerce para  Functors, Applicatives, Monads, Arrows(veja morfismos) etc.  O tipo  `Maybe` define dois contextos
+Agora, quando você aplica uma função a este valor você receberá diferentes resultados dependendo do seu contexto. Esta é a ideia que serve de alicerce para  Functors, Applicatives, Monads, Arrows(veja morfismos) etc.  O tipo  `Maybe` define dois contextos
+
+
 
 ```haskell
 data Maybe a = Nothing | Just a
