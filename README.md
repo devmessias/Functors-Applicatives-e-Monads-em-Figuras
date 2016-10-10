@@ -28,68 +28,113 @@ Quando um valor está dentro de um contexto ele não permite a aplicação de um
 
 ![](img/no_fmap_ouch.png)
 
-Aqui é onde o `fmap` surge. `fmap` is from the street, `fmap` is hip to contexts. `fmap` knows how to apply functions to values that are wrapped in a context. Por exemplo, suponha que você quer
-aplicar `(+3)` para `Just 2`. Usando fmap
+Aqui é onde o `fmap` surge.  `fmap` tem consciência do contexto. `fmap` sabe como atuar funções em valores
+que estão envoltos por um contexto. Por exemplo, suponha que você queira
+aplicar `(+3)` para `Just 2`. Usando `fmap`
 
 ```haskell
 > fmap (+3) (Just 2)
 Just 5
 ```
 
-Bum! `fmap` shows us how it’s done! But how does `fmap` know how to apply the function?
-Just what is a Functor, really?
+
+![](img/fmap_apply.png)
+
+Bum! `fmap` shows us how it’s done!  Mas como  `fmap` sabe como aplicar a função?
+
+### Primieramente, o que é um functor?
+
 Functor is a typeclass. Here’s the definition:
 
 A Functor is any data type that defines how fmap applies to it. Here’s how fmap works:
-
+![](img/fmap_def.png)
 So we can do this:
 
-
+```haskell
 > fmap (+3) (Just 2)
 Just 5
+```
+
 And fmap magically applies this function, because Maybe is a Functor. It specifies how fmap applies to Justs and Nothings:
+
 instance Functor Maybe where
     fmap func (Just val) = Just (func val)
     fmap func Nothing = Nothing
 Here’s what is happening behind the scenes when we write fmap (+3) (Just 2):
 
+![](img/fmap_just.png)
+
 So then you’re like, alright fmap, please apply (+3) to a Nothing?
+
+![](img/fmap_nothing.png)
+
+```haskell
 > fmap (+3) Nothing
 Nothing
+
+![](img/bill.png)
+
 Bill O’Reilly being totally ignorant about the Maybe functor
-Bill O’Reilly being totally ignorant about the Maybe functor
+
 Like Morpheus in the Matrix, fmap knows just what to do; you start with Nothing, and you end up with Nothing! fmap is zen. Now it makes sense why the Maybe data type exists. For example, here’s how you work with a database record in a language without Maybe:
+
+```
 post = Post.find_by_id(1)
 if post
   return post.title
 else
   return nil
 end
+
 But in Haskell:
+
+```haskell
 fmap (getPostTitle) (findPost 1)
+
 If findPost returns a post, we will get the title with getPostTitle. If it returns Nothing, we will return Nothing! Pretty neat, huh? <$> is the infix version of fmap, so you will often see this instead:
 getPostTitle <$> (findPost 1)
+
 Here’s another example: what happens when you apply a function to a list?
 
+![](img/fmap_list.png)
+
 Lists are functors too! Here’s the definition:
+
+```haskell
 instance Functor [] where
     fmap = map
+
 Okay, okay, one last example: what happens when you apply a function to another function?
+
+```haskell
 fmap (+3) (+1)
+
 Here’s a function:
+
+![](img/function_with_value.png)
 
 Here’s a function applied to another function:
 
+![](img/fmap_function.png)
+
 The result is just another function!
+
+```haskell
 > import Control.Applicative
 > let foo = fmap (+3) (+2)
 > foo 10
 15
+
 So functions are Functors too!
+
+```haskell
 instance Functor ((->) r) where
     fmap f g = f . g
+
 When you use fmap on a function, you’re just doing function composition!
-Applicatives
+
+## Applicatives
+
 Applicatives take it to the next level. With an applicative, our values are wrapped in a context, just like Functors:
 
 But our functions are wrapped in a context too!
@@ -97,17 +142,25 @@ But our functions are wrapped in a context too!
 Yeah. Let that sink in. Applicatives don’t kid around. Control.Applicative defines <*>, which knows how to apply a function wrapped in a context to a value wrapped in a context:
 
 i.e:
+```haskell
 Just (+3) <*> Just 2 == Just 5
+
 Using <*> can lead to some interesting situations. For example:
+
+```haskell
 > [(*2), (+3)] <*> [1, 2, 3]
 [2, 4, 6, 4, 5, 6]
 
 Here’s something you can do with Applicatives that you can’t do with Functors. How do you apply a function that takes two arguments to two wrapped values?
+```haskell
 > (+) <$> (Just 5)
 Just (+5)
 > Just (+5) <$> (Just 4)
 ERROR ??? WHAT DOES THIS EVEN MEAN WHY IS THE FUNCTION WRAPPED IN A JUST
+
 Applicatives:
+
+```haskell
 > (+) <$> (Just 5)
 Just (+5)
 > Just (+5) <*> (Just 3)
