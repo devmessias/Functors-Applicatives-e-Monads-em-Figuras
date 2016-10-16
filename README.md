@@ -4,61 +4,60 @@ A imagem abaixo representa um valor simples
 
 ![](img/value.png)
 
-E você sabe como aplicar uma função cujo o argumento  é o  valor acima,
+E você sabe como aplicar uma função(ex: adicione +3) cujo o argumento  é o  valor acima,
 
 ![](img/value_apply.png)
 
-Muito simples! Vamos estender isso dizendo que qualquer valor pode estar dentro de um contexto. Um recurso didático é imaginar que o contexto é uma caixa na qual você pode colocar valores dentro
+Muito simples! Uma generalização para o processo acima é dizer que qualquer valor pode estar dentro de um contexto. Um recurso didático é imaginar que o contexto é uma caixa na qual você pode colocar valores dentro
 
 ![](img/value_and_context.png)
 
-Agora, quando você aplica uma função a este valor você receberá diferentes resultados dependendo do seu contexto. Esta é a ideia que serve de alicerce para  Functors, Applicatives, Monads, Arrows(veja morfismos) etc.  O tipo  `Maybe` define dois contextos
+Agora, quando você aplica uma função a este valor você receberá diferentes resultados dependendo do seu contexto. Esta é a ideia que serve de alicerce para  Functors, Applicatives, Monads, Arrows(veja morfismos) etc.  Em se tratando de contextos, o tipo  `Maybe` define dois contextos
 
-
-
-```haskell
-data Maybe a = Nothing | Just a
-```
-
-Posteriormente eu lhe mostrarei as diferenças quando se aplica uma função quando algo é um `Just` ou `Nothing`, mas antes disso vamos conversar um pouco sobre Functors!
+Posteriormente eu lhe mostrarei as diferenças quando se aplica uma função em algo que é um `Just` ou `Nothing`, mas antes disso vamos conversar um pouco sobre Functors!
 
 
 ## Functors
 
-Quando um valor está dentro de um contexto ele não permite a aplicação de uma função "ordinária" à ele
+Quando um valor está envolto por um contexto ele não permite a aplicação de uma função "ordinária" à ele
 
 ![](img/no_fmap_ouch.png)
 
-Aqui é onde o `fmap` surge.  `fmap` tem consciência do contexto. `fmap` sabe como atuar funções em valores
+
+
+Aqui é onde o `fmap` surge.  O `fmap` tem consciência do contexto. O `fmap` sabe como  atuar  funções em valores
 que estão envoltos por um contexto. Por exemplo, suponha que você queira
-aplicar `(+3)` para `Just 2`. Usando `fmap`
+aplicar `(+3)` para `Just 2`. Usando `fmap` isso é facil
+
 
 ```haskell
 > fmap (+3) (Just 2)
 Just 5
 ```
-
 
 ![](img/fmap_apply.png)
 
-Bum! `fmap` shows us how it’s done!  Mas como  `fmap` sabe como aplicar a função?
+Bum! `fmap` mostra seu valor.  Mas como  `fmap` sabe como  deve aplicar uma função?
 
 ### Primieramente, o que é um functor?
 
-Functor is a typeclass. Here’s the definition:
+Um Functor é chamado  de typelcass. A figura a baixo apresenta a definição
 
 ![](img/functor_def.png)
 
-A Functor is any data type that defines how fmap applies to it. Here’s how fmap works:
+Um functor é qualquer tipo de dado que define como `fmap` se aplicará a ele. Aqui como o `fmap` funciona
+
 ![](img/fmap_def.png)
-So we can do this:
+
+Então podemos fazer o seguinte
 
 ```haskell
 > fmap (+3) (Just 2)
 Just 5
 ```
 
-And fmap magically applies this function, because Maybe is a Functor. It specifies how fmap applies to Justs and Nothings:
+E `fmap` magicamente aplica isto a função, pois `Maybe`  é um Functor. A imagem abaixo especifica como `fmap` deve atuar em `Just`'s e `Nothing`'s:
+
 ```haskell
 instance Functor Maybe where
     fmap func (Just val) = Just (func val)
@@ -67,11 +66,11 @@ instance Functor Maybe where
 
 
 
-Here’s what is happening behind the scenes when we write fmap (+3) (Just 2):
+O que acontece quando escrevemos `fmap +(3) (Just 2)`
 
 ![](img/fmap_just.png)
 
-So then you’re like, alright fmap, please apply (+3) to a Nothing?
+Você gostou? Certo `fmap`, então aplique `(+3)` em um  `Nothing`
 
 ![](img/fmap_nothing.png)
 
@@ -83,7 +82,7 @@ Nothing
 
 ![](img/bill.png)
 
-Bill O’Reilly being totally ignorant about the Maybe functor
+Bill O’Reilly sendo um ignorante total sobre `Maybe` totally ignorant about the Maybe functor
 
 Like Morpheus in the Matrix, `fmap` knows just what to do; you start with Nothing, and you end up with Nothing! `fmap` is zen. Now it makes sense why the `Maybe` data type exists. For example, here’s how you work with a database record in a language without `Maybe`:
 
@@ -210,27 +209,28 @@ Just 15
 
 ## Monads
 
-How to learn about Monads:
-1. Get a PhD in computer science.
-2. Throw it away because you don’t need it for this section!
+Como aprender sobre Monads:
+1. Obtenha um titulo de Doutor em Ciência da Computação
+2. Jogue ele fora por que você não precisará dele nesta secção!
+
 
 Monads add a new twist.
-Functors apply a function to a wrapped value:
+Functors aplicam funções a valores dentro de contextos:
 
 ![](img/fmap.png)
 
-Applicatives apply a wrapped function to a wrapped value:
+Applicative aplicam funções que estão dentro de contextos em valores que por sua vez também estão dentro de outros contextos:
+
 
 ![](img/applicative.png)
 
-Monads apply a function that returns a wrapped value to a wrapped value. Monads have a function >>= (pronounced “bind”) to do this.
-Let’s see an example. Good ol’ Maybe is a monad:
+Monads aplicam funções em valores envoltos por contextos e  retornam valores envoltos por contextos. A maquinaria das Monads em haskell é representada pela  função >>= (“bind”).
+Vejamos um exemplo. Good ol’ Maybe is a monad:
 
 ![](img/context.png)
 
 Just a monad hanging out
-Just a monad hanging out
-Suppose half is a function that only works on even numbers:
+Suponha que `half` é uma função que funciona unicamente em números pares
 
 ```
 half x = if even x
@@ -240,18 +240,15 @@ half x = if even x
 
 ![](img/half.png)
 
-What if we feed it a wrapped value?
-
+O que acontece se alimentarmos tal função com um valor envolto por um contexto?
 
 ![](img/half_ouch.png)
 
-We need to use >>= to shove our wrapped value into the function. Here’s a photo of >>=:
+Nos precisamos utilizar `>>=` em nosso valor com contexto para expulsá-lo do contexto, retirá-lo da caixa. Aqui uma foto representando `>>=`
 
 ![](img/plunger.png)
 
-
-Here’s how it works:
-
+Aqui como ele funciona
 ```
 > Just 3 >>= half
 Nothing
@@ -261,8 +258,7 @@ Just 2
 Nothing
 ```
 
-What’s happening inside? Monad is another typeclass. Here’s a partial definition:
-
+Mas o que aconteceu dentro da nossa caixa? Monad é um outro `typeclass`. Segue uma definição parcial de uma Monad
 ```
 class Monad m where
     (>>=) :: m a -> (a -> m b) -> m b
@@ -270,8 +266,7 @@ Where >>= is:
 ```
 ![](img/bind_def.png)
 
-So Maybe is a Monad:
-
+Então uma `Maybe` Monad é
 ```
 
 instance Monad Maybe where
@@ -279,15 +274,13 @@ instance Monad Maybe where
     Just val >>= func  = func val
 ```
 
-Here it is in action with a Just 3!
-
+Aqui a ação desta monad em `Just 3`!
 ![](img/monad_just.png)
 
-And if you pass in a Nothing it’s even simpler:
-
+E se você passar um `Nothing` a coisa fica mais simples ainda
 ![](img/monad_nothing.png)
 
-You can also chain these calls:
+Você também pode colocar várias dessas ações em cadeia
 ```
 > Just 20 >>= half >>= half >>= half
 Nothing
@@ -296,36 +289,41 @@ Nothing
 ![](img/monad_chain.png)
 ![](img/whoa.png)
 
-Cool stuff! So now we know that Maybe is a Functor, an Applicative, and a Monad.
-Now let’s mosey on over to another example: the IO monad:
-![](img/io.png)
-Specifically three functions. getLine takes no arguments and gets user input:
+Muito legal! Agora vamos nos mexer um pouco e partir para um outro exemplo: a IO monad
 
+![](img/io.png)
+
+Especificamente três funções. `getLine` pega os argumentos que são fornecidos por um input do usuário
 ![](img/getLine.png)
 
-```
+```haskell
 getLine :: IO String
 ```
 
-readFile takes a string (a filename) and returns that file’s contents:
+`readFile`  pega uma string(que representa o nome do arquivo) e retorna o conteudo do arquivo cujo nome é essa string
 ![](img/readFile.png)
-
+```haskell
 readFile :: FilePath -> IO String
+```
 
-putStrLn takes a string and prints it:
-
+`putStrLn` pega a string e "printa"  ela na tela
 ![](img/putStrLn.png)
 
+```haskell
 putStrLn :: String -> IO ()
+```
 
-All three functions take a regular value (or no value) and return a wrapped value. We can chain all of these using >>=!
+Todas essas três funções pegam um valor comum(ou nenhum valor) e retornam um valor dentro de um contexto. Nos podemos encadear todas essas ações utilizando `>>=`!
 
 ![](img/monad_io.png)
 
+```haskell
 getLine >>= readFile >>= putStrLn
-Aw yeah! Front row seats to the monad show!
-Haskell also provides us with some syntactical sugar for monads, called do notation:
 ```
+
+Aw yeah!  Acomodem-se em suas cadeiras para o show da Monad! Haskell também nos fornece um sintaxe sucinta para monads, chamada do notation:
+
+```haskell
 foo = do
     filename <- getLine
     contents <- readFile filename
