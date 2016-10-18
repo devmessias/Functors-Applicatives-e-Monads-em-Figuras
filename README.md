@@ -84,7 +84,7 @@ Nothing
 
 Bill O’Reilly sendo um ignorante total sobre `Maybe` totally ignorant about the Maybe functor
 
-Like Morpheus in the Matrix, `fmap` knows just what to do; you start with Nothing, and you end up with Nothing! `fmap` is zen. Now it makes sense why the `Maybe` data type exists. For example, here’s how you work with a database record in a language without `Maybe`:
+Assim como Morfeu em Matrix  `fmap` sabe o que tem que ser feito. Se você começa com nada então ele retorna nada. `fmap` segue o modo zen. Agora faz sentido o porquê da existência do tipo `Maybe`.  Por exemplo, vamos começar a trabalhar com um banco de dados  com um registro em uma linguagem sem `Maybe`:
 
 ```
 post = Post.find_by_id(1)
@@ -95,44 +95,47 @@ else
 end
 ```
 
-But in Haskell:
+Mas em Haskell:
 
 ```haskell
 fmap (getPostTitle) (findPost 1)
 ```
 
-If `findPost` returns a post, we will get the title with `getPostTitle`. If it returns `Nothing`, we will return `Nothing`! Pretty neat, huh? `<$>` is the infix version of `fmap`, so you will often see this instead:
+Se `findPost` retornar um post, o código acima retornará o título do post através de `getPostTitle`. Se `findPost` retornar um `Nothing`, no final ainda teremos `Nothing`! Você precisa concordar que isto é uma formar bem mais organizada que o código anterior.  
 
-```
+`<$>` é uma versão infix de `fmap`, então comumente você poderá encontrar códigos em haskell escritos da seguinte maneira
+
+```haskell
 getPostTitle <$> (findPost 1)
 ```
 
+Aqui em baixo segue um outro exemplo: o que acontece quando você aplica uma função em uma lista
 Here’s another example: what happens when you apply a function to a list?
 
 ![](img/fmap_nothing.png)
 
-Lists are functors too! Here’s the definition:
+Listas são funtores também! Segue uma definição:
 
 ```haskell
 instance Functor [] where
     fmap = map
 ```
 
-Okay, okay, one last example: what happens when you apply a function to another function?
+Okay, okay, um último exemplo: o que acontece quando você aplica uma função em outra função?
 
 ```haskell
 fmap (+3) (+1)
 ```
 
-Here’s a function:
+Aqui a função:
 
 ![](img/function_with_value.png)
 
-Here’s a function applied to another function:
+Aqui a função aplicada em outra função:
 
 ![](img/fmap_function.png)
 
-The result is just another function!
+O resultado é outra função!
 
 ```haskell
 > import Control.Applicative
@@ -141,14 +144,14 @@ The result is just another function!
 15
 ```
 
-So functions are Functors too!
+Então funcções são funtores também!
 
 ```haskell
 instance Functor ((->) r) where
     fmap f g = f . g
 ```
 
-When you use fmap on a function, you’re just doing function composition!
+Quando você usa `fmap` em uma função, você está apenas realizando uma composição de funções!
 
 ## Applicatives
 
