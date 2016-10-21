@@ -155,15 +155,15 @@ Quando você usa `fmap` em uma função, você está apenas realizando uma compo
 
 ## Applicatives
 
-Applicatives take it to the next level. With an applicative, our values are wrapped in a context, just like Functors:
+Applicatives nos levam ao próximo level. Com um applicative nossos valores são envoltos por contextos assim como Functors
 
 ![](img/value_and_context.png)
 
-But our functions are wrapped in a context too!
+Mas é importante notar que no casso de applicatives nossas funções também são envoltas por contextos!
 
 ![](img/function_and_context.png)
 
-Yeah. Let that sink in. Applicatives don’t kid around. Control.Applicative defines `<*>`, which knows how to apply a function wrapped in a context to a value wrapped in a context:
+Yeah. Let that sink in. Applicatives não estão para brincadeira. Control.Applicative defines `<*>`, o qual sabe como aplicar uma função envolta por um contexto em um valor envolto por um contexto
 
 ![](img/applicative_just.png)
 
@@ -172,7 +172,7 @@ i.e:
 Just (+3) <*> Just 2 == Just 5
 ```
 
-Using `<*>` can lead to some interesting situations. For example:
+Usando `<*>` pode nos retornar situações deveras interessantes. Por exemplo:
 
 ```haskell
 > [(*2), (+3)] <*> [1, 2, 3]
@@ -181,14 +181,16 @@ Using `<*>` can lead to some interesting situations. For example:
 
 ![](img/applicative_list.png)
 
-Here’s something you can do with Applicatives that you can’t do with Functors. How do you apply a function that takes two arguments to two wrapped values?
+Abaixo segue uma coisa que você consegue fazer com Applicatives, mas não consegue fazer com Functors. Como aplicar uma função que pega dois argumentos para dois valores envoltos em um contexto?
 
 ```haskell
 > (+) <$> (Just 5)
 Just (+5)
 > Just (+5) <$> (Just 4)
-ERROR ??? WHAT DOES THIS EVEN MEAN WHY IS THE FUNCTION WRAPPED IN A JUST
+
 ```
+
+ERROR ??? WHAT DOES THIS EVEN MEAN WHY IS THE FUNCTION WRAPPED IN A JUST
 
 Applicatives:
 
@@ -202,7 +204,7 @@ Just 8
 Applicative pushes Functor aside. “Big boys can use functions with any number of arguments,” it says. “Armed <$> and `<*>`,
  I can take any function that expects any number of unwrapped values. Then I pass it all wrapped values, and I get a wrapped value out! AHAHAHAHAH!”
 
-```
+```haskell
 > (*) <$> Just 5 <*> Just 3
 Just 15
 And hey! There’s a function called liftA2 that does the same thing:
