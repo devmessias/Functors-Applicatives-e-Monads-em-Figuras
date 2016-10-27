@@ -1,3 +1,4 @@
+
 # Functors, Applicatives e Monads em figuras
 
 A imagem abaixo representa um valor simples
@@ -163,7 +164,7 @@ Mas é importante notar que no casso de applicatives nossas funções também s�
 
 ![](img/function_and_context.png)
 
-Yeah. Let that sink in. Applicatives não estão para brincadeira. Control.Applicative defines `<*>`, o qual sabe como aplicar uma função envolta por um contexto em um valor envolto por um contexto
+Yeah. Let that sink in. Applicatives não estão para brincadeira. `Control.Applicative` define `<*>`, o qual sabe como aplicar uma função envolta por um contexto em um valor envolto por um contexto
 
 ![](img/applicative_just.png)
 
@@ -201,13 +202,21 @@ Just (+5)
 Just 8
 ```
 
-Applicative pushes Functor aside. “Big boys can use functions with any number of arguments,” it says. “Armed <$> and `<*>`,
- I can take any function that expects any number of unwrapped values. Then I pass it all wrapped values, and I get a wrapped value out! AHAHAHAHAH!”
+Applicative colocam Functors  delado.
+
+> Adultos podem usar funções com qualquer número de argumentos - Applicative
+
+
+> Armado com `<$>` and `<*>`, eu posso pegar qualquer função que possui qualquer quantidade de argumentos que não estão envoltos por contextos. Então, eu coloco esses argumentos dentro de contextos, e finalmente eu retorno com saida um valor envolto por contexto huehehuuhe!”
 
 ```haskell
 > (*) <$> Just 5 <*> Just 3
 Just 15
-And hey! There’s a function called liftA2 that does the same thing:
+```
+
+And hey! Existe uma função chamada `liftA2` que faz
+a mesma coisa:
+```haskell
 > liftA2 (*) (Just 5) (Just 3)
 Just 15
 ```
@@ -251,10 +260,10 @@ O que acontece se alimentarmos tal função com um valor envolto por um contexto
 
 Nos precisamos utilizar `>>=` em nosso valor com contexto para expulsá-lo do contexto, retirá-lo da caixa. Aqui uma foto representando `>>=`
 
-![](img/plunger.png)
+![](img/plunger.jpg)
 
 Aqui como ele funciona
-```
+```haskell
 > Just 3 >>= half
 Nothing
 > Just 4 >>= half
@@ -264,7 +273,7 @@ Nothing
 ```
 
 Mas o que aconteceu dentro da nossa caixa? Monad é um outro `typeclass`. Segue uma definição parcial de uma Monad
-```
+```haskell
 class Monad m where
     (>>=) :: m a -> (a -> m b) -> m b
 Where >>= is:
@@ -272,8 +281,7 @@ Where >>= is:
 ![](img/bind_def.png)
 
 Então uma `Maybe` Monad é
-```
-
+```haskell
 instance Monad Maybe where
     Nothing >>= func = Nothing
     Just val >>= func  = func val
@@ -286,7 +294,7 @@ E se você passar um `Nothing` a coisa fica mais simples ainda
 ![](img/monad_nothing.png)
 
 Você também pode colocar várias dessas ações em cadeia
-```
+```haskell
 > Just 20 >>= half >>= half >>= half
 Nothing
 ```
