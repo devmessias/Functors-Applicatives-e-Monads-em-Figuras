@@ -1,6 +1,10 @@
-> Esta é uma tradução do excelente post
-feito por [Aditya Bhargava](https://github.com/egonSchiele). O post original pode ser lido  [aqui](http://adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html). Ao traduzir o post realizei algumas escolhas, tais como manter os nomes dos conceitos em inglês, exemplo:  Functors(Funtores) e Monads.
-Se você encontrar qualquer erro na tradução e você encontrará, não utilizei corretores ortográficos, não se acanhe em enviar um pull request.
+> Esta é uma tradução do excelente post feito por [Aditya Bhargava](https://github.com/egonSchiele). O post original pode ser lido  [aqui](http://adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html).
+>
+> Ao traduzir o post realizei algumas escolhas, tais como:
+>1. manter os nomes dos conceitos em inglês, exemplo:  Functors(Funtores) e Monads.
+>2. Algumas expressões não fazem sentido se forem traduzidas literalmente para o português, outras perdem o contexto cultural quando você às trás para o Brasil. Por exemplo, Aditya cita Mel Gibson no texto(acredito eu)  pelo uso excessivo de álcool, portanto acredito que um substituto para ele seja Zecá Pagodinho, me processe
+>
+>Se você encontrar qualquer erro na tradução e você encontrará, não utilizei corretores ortográficos, não se acanhe em enviar um pull request.
 
 # Functors, Applicatives e Monads em figuras
 
@@ -341,7 +345,7 @@ getLine :: IO String
 readFile :: FilePath -> IO String
 ```
 
-`putStrLn` pega a string e "printa"  ela na tela
+3. `putStrLn` pega a string e "printa"  ela na tela
 ![](img/putStrLn.png)
 
 ```haskell
@@ -380,3 +384,5 @@ Qual é a diferença entre os três?
 - **monads:** você  pega um valor envolto por um contexto, extrai ele, aplica uma função, e retorna um valor envolto por um contexto, para isso você pode usar  `>>=` ou `liftM`
 
 Então, querido amigo (Eu penso que neste ponto já posso considerar que somos amigos), eu penso que ambos concordamos que monads são faceis além de serem uma ideia muito inteligente.
+
+Agora que você saboreou esse guia por que não convidar o Zeca Pagodinho para entornar uma cerveja e estudar toda uma secção  sobre monads? Tal secção está disponível [aqui](http://learnyouahaskell.com/a-fistful-of-monads). Existem muitas coisas que eu passei por cima, pois Miran Lipovaca(criador do [Learn You a Haskell](http://learnyouahaskell.com/chapters)) fez um grande trabalho o qual se  aprofundanda em monads e muito outros temas, tal trabalho esta disponível gratuitamente neste link : [http://learnyouahaskell.com/chapters](http://learnyouahaskell.com/chapters)
