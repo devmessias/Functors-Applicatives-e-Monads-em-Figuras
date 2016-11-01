@@ -95,7 +95,7 @@ Nothing
 ```
 
 ![](img/bill.png)
-[Bill O’Reilly](https://www.wikiwand.com/en/Bill_O'Reilly_(political_commentator)) sendo  ignorante  sobre `Maybe` (Não conhecia esse cara até traduzir esse post, não confunda com [Tim O'Reilly](https://www.wikiwand.com/pt/Tim_O'Reilly))
+*[Bill O’Reilly](https://www.wikiwand.com/en/Bill_O'Reilly_(political_commentator)) sendo  ignorante  sobre `Maybe` (Não conhecia esse cara até traduzir esse post, não confunda com [Tim O'Reilly](https://www.wikiwand.com/pt/Tim_O'Reilly))*
 
 Assim como Morfeu em Matrix  `fmap` sabe o que tem que ser feito. Se você começa com `Nothing` então ele retorna `Nothing`. `fmap` segue o modo zen. Agora faz sentido o porquê da existência do tipo `Maybe`.  Por exemplo, vamos começar a trabalhar com um banco de dados em uma linguagem(nesse caso, ruby) sem `Maybe`:
 
