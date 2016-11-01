@@ -1,3 +1,6 @@
+> Esta é uma tradução do excelente post
+feito por [Aditya Bhargava](https://github.com/egonSchiele). O post original pode ser lido  [aqui](http://adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html). Ao traduzir o post realizei algumas escolhas, tais como manter os nomes dos conceitos em inglês, exemplo:  Functors(Funtores) e Monads.
+Se você encontrar qualquer erro na tradução e você encontrará, não utilizei corretores ortográficos, não se acanhe em enviar um pull request.
 
 # Functors, Applicatives e Monads em figuras
 
@@ -13,7 +16,13 @@ Muito simples! Uma generalização para o processo acima é dizer que qualquer v
 
 ![](img/value_and_context.png)
 
-Agora, quando você aplica uma função a este valor você receberá diferentes resultados dependendo do seu contexto. Esta é a ideia que serve de alicerce para  Functors, Applicatives, Monads, Arrows(veja morfismos) etc.  Em se tratando de contextos, o tipo  `Maybe` define dois contextos
+Agora, quando você aplica uma função a este valor você receberá diferentes resultados **dependendo do  contexto em que o resultado está inserido**. Esta é a ideia que serve de alicerce para  Functors, Applicatives, Monads, Arrows(veja morfismos) etc.  Em se tratando de contextos, o tipo  `Maybe` define dois contextos
+
+![](img/context.png)
+
+```haskell
+data Maybe a = Nothing | Just a
+```
 
 Posteriormente eu lhe mostrarei as diferenças quando se aplica uma função em algo que é um `Just` ou `Nothing`, mas antes disso vamos conversar um pouco sobre Functors!
 
@@ -28,7 +37,7 @@ Quando um valor está envolto por um contexto ele não permite a aplicação de 
 
 Aqui é onde o `fmap` surge.  O `fmap` tem consciência do contexto. O `fmap` sabe como  atuar  funções em valores
 que estão envoltos por um contexto. Por exemplo, suponha que você queira
-aplicar `(+3)` para `Just 2`. Usando `fmap` isso é facil
+aplicar `(+3)` em `Just 2`. Usando `fmap` isso é fácil
 
 
 ```haskell
@@ -42,11 +51,11 @@ Bum! `fmap` mostra seu valor.  Mas como  `fmap` sabe como  deve aplicar uma fun�
 
 ### Primieramente, o que é um functor?
 
-Um Functor é chamado  de typelcass. A figura a baixo apresenta a definição
+Um Functor é chamado  de [typelcass](http://learnyouahaskell.com/types-and-typeclasses#typeclasses-101). A figura a baixo apresenta a definição
 
 ![](img/functor_def.png)
 
-Um functor é qualquer tipo de dado que define como `fmap` se aplicará a ele. Aqui como o `fmap` funciona
+Um functor é qualquer tipo de dado que define como `fmap` se aplicará a ele. Aqui, como o `fmap` funciona:
 
 ![](img/fmap_def.png)
 
@@ -57,7 +66,7 @@ Então podemos fazer o seguinte
 Just 5
 ```
 
-E `fmap` magicamente aplica isto a função, pois `Maybe`  é um Functor. A imagem abaixo especifica como `fmap` deve atuar em `Just`'s e `Nothing`'s:
+E `fmap` magicamente aplica isto (`Just 2`) a função, pois `Maybe`  é um Functor. A imagem abaixo especifica como `fmap` deve atuar em `Just`'s e `Nothing`'s:
 
 ```haskell
 instance Functor Maybe where
@@ -82,12 +91,11 @@ Nothing
 ```
 
 ![](img/bill.png)
+[Bill O’Reilly](https://www.wikiwand.com/en/Bill_O'Reilly_(political_commentator)) sendo  ignorante  sobre `Maybe` (Não conhecia esse cara até traduzir esse post, não confunda com [Tim O'Reilly](https://www.wikiwand.com/pt/Tim_O'Reilly))
 
-Bill O’Reilly sendo um ignorante total sobre `Maybe` totally ignorant about the Maybe functor
+Assim como Morfeu em Matrix  `fmap` sabe o que tem que ser feito. Se você começa com `Nothing` então ele retorna `Nothing`. `fmap` segue o modo zen. Agora faz sentido o porquê da existência do tipo `Maybe`.  Por exemplo, vamos começar a trabalhar com um banco de dados em uma linguagem(nesse caso, ruby) sem `Maybe`:
 
-Assim como Morfeu em Matrix  `fmap` sabe o que tem que ser feito. Se você começa com nada então ele retorna nada. `fmap` segue o modo zen. Agora faz sentido o porquê da existência do tipo `Maybe`.  Por exemplo, vamos começar a trabalhar com um banco de dados  com um registro em uma linguagem sem `Maybe`:
-
-```
+```ruby
 post = Post.find_by_id(1)
 if post
   return post.title
@@ -102,18 +110,17 @@ Mas em Haskell:
 fmap (getPostTitle) (findPost 1)
 ```
 
-Se `findPost` retornar um post, o código acima retornará o título do post através de `getPostTitle`. Se `findPost` retornar um `Nothing`, no final ainda teremos `Nothing`! Você precisa concordar que isto é uma formar bem mais organizada que o código anterior.  
+Se `findPost` retornar um post, o código acima retornará o título do post através de `getPostTitle`. Se `findPost` retornar um `Nothing`, no final ainda teremos `Nothing`! Você precisa concordar que isto é uma forma bem mais organizada  de trabalhar do que utilizar código em ruby.  
 
-`<$>` é uma versão infix de `fmap`, então comumente você poderá encontrar códigos em haskell escritos da seguinte maneira
+No código podemos utilizar  `<$>`, que é uma versão infix de `fmap`, então comumente você poderá encontrar códigos em haskell escritos da seguinte maneira
 
 ```haskell
 getPostTitle <$> (findPost 1)
 ```
 
-Aqui em baixo segue um outro exemplo: o que acontece quando você aplica uma função em uma lista
-Here’s another example: what happens when you apply a function to a list?
+Aqui em baixo segue um outro exemplo: o que acontece quando você aplica uma função em uma lista?
 
-![](img/fmap_nothing.png)
+![](img/fmap_list.png)
 
 Listas são funtores também! Segue uma definição:
 
@@ -156,24 +163,26 @@ Quando você usa `fmap` em uma função, você está apenas realizando uma compo
 
 ## Applicatives
 
-Applicatives nos levam ao próximo level. Com um applicative nossos valores são envoltos por contextos assim como Functors
+Applicatives nos levam ao próximo nível. Com um applicative nossos valores são envoltos por contextos assim como Functors
 
 ![](img/value_and_context.png)
 
-Mas é importante notar que no casso de applicatives nossas funções também são envoltas por contextos!
+Mas é importante notar que no caso de applicatives nossas funções também são envoltas por contextos!
 
 ![](img/function_and_context.png)
 
-Yeah. Let that sink in. Applicatives não estão para brincadeira. `Control.Applicative` define `<*>`, o qual sabe como aplicar uma função envolta por um contexto em um valor envolto por um contexto
+ Applicatives não estão para brincadeira. `Control.Applicative` define um operador `<*>`, o qual sabe como aplicar uma função envolta por um contexto em um valor envolto por um contexto
 
 ![](img/applicative_just.png)
 
 i.e:
+
 ```haskell
-Just (+3) <*> Just 2 == Just 5
+> Just (+3) <*> Just 2
+Just 5
 ```
 
-Usando `<*>` pode nos retornar situações deveras interessantes. Por exemplo:
+O uso de `<*>` pode nos retornar situações deveras interessantes. Por exemplo:
 
 ```haskell
 > [(*2), (+3)] <*> [1, 2, 3]
@@ -182,40 +191,41 @@ Usando `<*>` pode nos retornar situações deveras interessantes. Por exemplo:
 
 ![](img/applicative_list.png)
 
-Abaixo segue uma coisa que você consegue fazer com Applicatives, mas não consegue fazer com Functors. Como aplicar uma função que pega dois argumentos para dois valores envoltos em um contexto?
+Abaixo segue uma coisa que você consegue fazer com Applicatives, mas não consegue fazer com Functors.
+
+   *Como aplicar uma função que pega dois argumentos para dois valores envoltos em um contexto?*
 
 ```haskell
-> (+) <$> (Just 5)
-Just (+5)
-> Just (+5) <$> (Just 4)
-
+> (+1) <$> (Just 5)
+Just (+6)
+> Just (+6) <$> (Just 4)
+ERRO!!
 ```
 
-ERROR ??? WHAT DOES THIS EVEN MEAN WHY IS THE FUNCTION WRAPPED IN A JUST
+
 
 Applicatives:
 
 ```haskell
-> (+) <$> (Just 5)
-Just (+5)
-> Just (+5) <*> (Just 3)
+> Just (+6) <*> (Just 3)
 Just 8
 ```
 
-Applicative colocam Functors  delado.
+Applicatives colocam Functors  de lado.
 
-> Adultos podem usar funções com qualquer número de argumentos - Applicative
+"*Adultos podem usar funções com qualquer número de argumentos"-Applicative*
 
 
-> Armado com `<$>` and `<*>`, eu posso pegar qualquer função que possui qualquer quantidade de argumentos que não estão envoltos por contextos. Então, eu coloco esses argumentos dentro de contextos, e finalmente eu retorno com saida um valor envolto por contexto huehehuuhe!”
+"*Armado com `<$>` and `<*>`, eu posso pegar qualquer função que possui qualquer quantidade de argumentos que não estão envoltos por contextos. Então, eu coloco esses argumentos dentro de contextos, e finalmente eu retorno como saída um valor envolto por contexto huehehuuhe!"-Applicative*
 
 ```haskell
 > (*) <$> Just 5 <*> Just 3
 Just 15
 ```
 
-And hey! Existe uma função chamada `liftA2` que faz
+Ei! Existe uma função chamada `liftA2` que faz
 a mesma coisa:
+
 ```haskell
 > liftA2 (*) (Just 5) (Just 3)
 Just 15
@@ -224,11 +234,11 @@ Just 15
 ## Monads
 
 Como aprender sobre Monads:
-1. Obtenha um titulo de Doutor em Ciência da Computação
+1. Obtenha um título de Doutor em Ciência da Computação
 2. Jogue ele fora por que você não precisará dele nesta secção!
 
 
-Monads add a new twist.
+Monads estão em alta.
 Functors aplicam funções a valores dentro de contextos:
 
 ![](img/fmap.png)
@@ -238,15 +248,15 @@ Applicative aplicam funções que estão dentro de contextos em valores que por 
 
 ![](img/applicative.png)
 
-Monads aplicam funções em valores envoltos por contextos e  retornam valores envoltos por contextos. A maquinaria das Monads em haskell é representada pela  função >>= (“bind”).
-Vejamos um exemplo. Good ol’ Maybe is a monad:
+Monads aplicam funções em valores envoltos por contextos e  **retornam valores envoltos por contextos**. A maquinaria das Monads em haskell é representada pela  função `>>=` (“bind”).
+Vejamos um exemplo. Good ol’ `Maybe` is a monad:
 
 ![](img/context.png)
 
-Just a monad hanging out
-Suponha que `half` é uma função que funciona unicamente em números pares
 
-```
+Suponha que `half` é uma função que funciona unicamente com números pares
+
+```haskell
 half x = if even x
            then Just (x `div` 2)
            else Nothing
@@ -258,11 +268,14 @@ O que acontece se alimentarmos tal função com um valor envolto por um contexto
 
 ![](img/half_ouch.png)
 
-Nos precisamos utilizar `>>=` em nosso valor com contexto para expulsá-lo do contexto, retirá-lo da caixa. Aqui uma foto representando `>>=`
+Nos precisamos utilizar `>>=` em nosso valor com contexto para expulsá-lo do contexto, precisamos retirá-lo da caixa.
+
+ Aqui uma foto representando `>>=`
 
 ![](img/plunger.jpg)
 
 Aqui como ele funciona
+
 ```haskell
 > Just 3 >>= half
 Nothing
@@ -273,11 +286,13 @@ Nothing
 ```
 
 Mas o que aconteceu dentro da nossa caixa? Monad é um outro `typeclass`. Segue uma definição parcial de uma Monad
+
 ```haskell
 class Monad m where
     (>>=) :: m a -> (a -> m b) -> m b
 Where >>= is:
 ```
+
 ![](img/bind_def.png)
 
 Então uma `Maybe` Monad é
@@ -288,9 +303,11 @@ instance Monad Maybe where
 ```
 
 Aqui a ação desta monad em `Just 3`!
+
 ![](img/monad_just.png)
 
 E se você passar um `Nothing` a coisa fica mais simples ainda
+
 ![](img/monad_nothing.png)
 
 Você também pode colocar várias dessas ações em cadeia
@@ -300,20 +317,25 @@ Nothing
 ```
 
 ![](img/monad_chain.png)
+
 ![](img/whoa.png)
 
 Muito legal! Agora vamos nos mexer um pouco e partir para um outro exemplo: a IO monad
 
 ![](img/io.png)
 
-Especificamente três funções. `getLine` pega os argumentos que são fornecidos por um input do usuário
+Especifiquemos três funções.
+
+1. `getLine` pega os argumentos que são fornecidos por um input do usuário
+
 ![](img/getLine.png)
 
 ```haskell
 getLine :: IO String
 ```
 
-`readFile`  pega uma string(que representa o nome do arquivo) e retorna o conteudo do arquivo cujo nome é essa string
+2. `readFile`  pega uma string(que representa o nome do arquivo) e retorna o conteúdo do arquivo cujo nome é essa string
+
 ![](img/readFile.png)
 ```haskell
 readFile :: FilePath -> IO String
@@ -334,7 +356,7 @@ Todas essas três funções pegam um valor comum(ou nenhum valor) e retornam um 
 getLine >>= readFile >>= putStrLn
 ```
 
-Aw yeah!  Acomodem-se em suas cadeiras para o show da Monad! Haskell também nos fornece um sintaxe sucinta para monads, chamada do notation:
+Aw yeah!  Acomodem-se em suas cadeiras para o show da Monad! Haskell também nos fornece uma sintaxe sucinta para monads, chamada `do notation`:
 
 ```haskell
 foo = do
@@ -343,11 +365,18 @@ foo = do
     putStrLn contents
 ```
 
-## Conclusion
+## Conclusão
 
-A functor is a data type that implements the Functor typeclass.
-An applicative is a data type that implements the Applicative typeclass.
-A monad is a data type that implements the Monad typeclass.
-A Maybe implements all three, so it is a functor, an applicative, and a monad.
-What is the difference between the three?
+1. A functor is a data type that implements the Functor typeclass.
+2. An applicative is a data type that implements the Applicative typeclass.
+3. A monad is a data type that implements the Monad typeclass.
+4. A Maybe implements all three, so it is a functor, an applicative, and a monad.
+
+Qual é a diferença entre os três?
 ![](img/recap.png)
+
+- **functors:** você aplica uma função em um valor envolto por um contexto utilizando  `fmap` ou `<$>`
+- **applicatives:** você aplica uma função envolta por um contexto em um valor envolto por um contexto usando `<*>` ou `liftA`
+- **monads:** você  pega um valor envolto por um contexto, extrai ele, aplica uma função, e retorna um valor envolto por um contexto, para isso você pode usar  `>>=` ou `liftM`
+
+Então, querido amigo (Eu penso que neste ponto já posso considerar que somos amigos), eu penso que ambos concordamos que monads são faceis além de serem uma ideia muito inteligente.
