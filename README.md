@@ -371,10 +371,10 @@ foo = do
 
 ## Conclusão
 
-1. A functor is a data type that implements the Functor typeclass.
-2. An applicative is a data type that implements the Applicative typeclass.
-3. A monad is a data type that implements the Monad typeclass.
-4. A Maybe implements all three, so it is a functor, an applicative, and a monad.
+1. Functor é um tipo que implementa um Functor typeclass.
+2. Applicative é um tipo que implementa um Applicative typeclass.
+3. Monad  é um tipo que implementa  um Monad typeclass.
+4. Maybe implenta todos os outros,  então é um functor, um applicative e um monad.
 
 Qual é a diferença entre os três?
 ![](img/recap.png)
