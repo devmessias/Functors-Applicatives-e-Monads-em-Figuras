@@ -2,7 +2,7 @@
 >
 > Ao traduzir o post realizei algumas escolhas, tais como:
 >1. manter os nomes dos conceitos em inglês, exemplo:  Functors(Funtores) e Monads.
->2. Algumas expressões não fazem sentido se forem traduzidas literalmente para o português, outras perdem o contexto cultural quando você às trás para o Brasil. Por exemplo, Aditya cita Mel Gibson no texto(acredito eu)  pelo uso excessivo de álcool, portanto acredito que um substituto para ele seja Zecá Pagodinho, me processe
+>2. Algumas expressões não fazem sentido se forem traduzidas literalmente para o português, outras perdem o contexto cultural quando você às trás para o Brasil. Por exemplo, Aditya cita Mel Gibson no texto(acredito eu)  pelo uso excessivo de álcool.  Portanto acredito que um substituto para ele seja Zecá Pagodinho, me processe
 >
 >Se você encontrar qualquer erro na tradução e você encontrará, não utilizei corretores ortográficos, não se acanhe em enviar um pull request.
 
